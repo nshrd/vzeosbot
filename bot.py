@@ -7,13 +7,7 @@ from telegram import ReplyKeyboardMarkup, KeyboardButton
 from utils import verification_pubkey, check_account_accessability, create_eos_acc
 from alfacoins import create_order, get_order_status, id_generator
 
-
-API_KEY = '844065902:AAHbVzzrNMQ2dAHl2imAtBRlt76k0jv2B1w'
-
-PROXY = {
-    'proxy_url': 'socks5://163.172.143.72:1080',
-    'urllib3_proxy_kwargs': {'username': 'vzinvest', 'password': '5SG~swQFge'}
-}
+import config
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -25,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    mybot = Updater(API_KEY, request_kwargs=PROXY)
+    mybot = Updater(config.API_KEY, request_kwargs=config.PROXY)
     
     dp = mybot.dispatcher
 

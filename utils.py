@@ -2,6 +2,8 @@ import execjs
 from eospy.cleos import Cleos
 import requests
 
+import config
+
 
 def verification_pubkey(pubkey):
 	verification = execjs.compile('''
@@ -16,8 +18,8 @@ def verification_pubkey(pubkey):
 
 def create_eos_acc(account_name, activekey, ownerkey):
 	ce = Cleos(url='https://jungle2.cryptolions.io:443')
-	key = "5HtBa93q7G1KkSNTQRCaNXsyNgAeBU4CcfVTsDBQXbktWDUud59"
-	response = ce.create_account('testtestbet1', key, account_name,
+	key = config.EOS_PRIVATE_KEY
+	response = ce.create_account(config.CREATOR, key, account_name,
 	activekey, ownerkey,
                          stake_net='0.1000 EOS',
                          stake_cpu='0.1000 EOS',

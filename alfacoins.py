@@ -4,29 +4,11 @@ import json
 import random
 import string
 
-# md5pass = hashlib.md5("12!@qwQW".encode('utf-8')).hexdigest().upper()
+import config
 
-# url = 'https://www.alfacoins.com/api/status'
-
-# headers = {'Content-type': 'application/json',  # Определение типа данных
-#            'Accept': 'text/plain',
-#            'Content-Encoding': 'utf-8'}
-
-# data = {
-#   'name': 'vz invest',
-#   'secret_key': '639fef4e4f6cb774900f777cde3c29af',
-#   'password': md5pass,
-#   'txn_id': 409081
-# }
-
-# response = requests.post(url, json=data)
-
-# print(response.text)
-
-# def create_order()
 
 def hash_password():
-    md5pass = hashlib.md5("12!@qwQW".encode('utf-8')).hexdigest().upper()
+    md5pass = hashlib.md5(config.ALFACOINS_PASSWORD.encode('utf-8')).hexdigest().upper()
     return md5pass
 
 
@@ -40,8 +22,8 @@ def create_order(order_id):
     password = hash_password()
     payment_url = 'https://www.alfacoins.com/api/create'
     order_data = {
-        'name': 'vz invest',
-        'secret_key': '639fef4e4f6cb774900f777cde3c29af',
+        'name': config.ALFACOINS_NAME,
+        'secret_key': config.ALFACOINS_SECRETKEY,
         'password': password,
         'type': 'litecointestnet',
         'amount': 1,
@@ -49,8 +31,8 @@ def create_order(order_id):
         'currency': 'USD',
         'description': 'Payment for new EOS account',
         'options': {
-                    'notificationURL': 'http://vzbj.ru/notification',
-                    'redirectURL': 'http://vzbj.ru/processing',
+                    'notificationURL': config.NOTIFICATION_URL,
+                    'redirectURL': config.REDIRECT_URL,
                     'payerName': 'vztest',
                     'payerEmail': 'vztest@test.io'
                     }
@@ -64,8 +46,8 @@ def get_order_status(order_id):
     status_url = 'https://www.alfacoins.com/api/status'
     password = hash_password()
     order_data = {
-        'name': 'vz invest',
-        'secret_key': '639fef4e4f6cb774900f777cde3c29af',
+        'name': config.ALFACOINS_NAME,
+        'secret_key': config.ALFACOINS_SECRETKEY,
         'password': password,
         'txn_id': order_id
     }
