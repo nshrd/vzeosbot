@@ -11,15 +11,17 @@ from alfacoins import create_order, get_order_status, id_generator
 API_KEY = '844065902:AAHbVzzrNMQ2dAHl2imAtBRlt76k0jv2B1w'
 
 PROXY = {
-    'proxy_url': 'socks5://t1.learn.python.ru:1080',
-    'urllib3_proxy_kwargs': {'username': 'learn', 'password': 'python'}
+    'proxy_url': 'socks5://163.172.143.72:1080',
+    'urllib3_proxy_kwargs': {'username': 'vzinvest', 'password': '5SG~swQFge'}
 }
 
 
-logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO,
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.DEBUG,
                     filename='bot.log'
                     )
+
+logger = logging.getLogger(__name__)
 
 
 def main():
@@ -46,7 +48,9 @@ def main():
     dp.add_handler(account)
     dp.add_handler(MessageHandler(Filters.text, dontknow, pass_user_data=True))
 
-    mybot.start_polling()
+    dp.add_error_handler(error)
+
+    mybot.start_polling(timeout=30)
     mybot.idle()
 
 
@@ -65,6 +69,7 @@ def account_start(bot, update):
 
 
 def account_get_name(bot, update, user_data):
+    print(user_data)
     account_name = update.message.text
     if len(account_name) != 12:
         update.message.reply_text('Длина аккаунта должна быть 12 символов. Попробу еще раз')
@@ -125,7 +130,7 @@ def account_get_owner(bot, update, user_data):
 
 def account_get_payment(bot, update, user_data, job_queue):
     update.message.reply_text('Отлично, сейчас я сгенерирую ссылку для оплаты')
-    order_id = id_generator()
+    order_id = f'vz{id_generator()}'
     payment_data = create_order(order_id)
     user_data['order_id'] = payment_data['id']
     create_job(bot, update, job_queue, user_data)
@@ -171,6 +176,11 @@ def account_skip_dialog(bot, update, user_data):
 
 def dontknow(bot, update, user_data):
     update.message.reply_text('Пожалуйста, следуй инструкциям.')
+
+
+def error(bot, update, error):
+    """Log Errors caused by Updates."""
+    logger.warning(f'Update {update} caused error {error}')
 
 
 if __name__ == '__main__':
